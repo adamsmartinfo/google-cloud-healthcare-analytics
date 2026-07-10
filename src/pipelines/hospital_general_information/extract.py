@@ -1,8 +1,8 @@
 import json
 
-from src.utils.cms_client import fetch_all_cms_data
-from src.utils.config import CMS_HOSPITAL_API_URL
-from src.load.upload_to_gcs import upload_file
+from src.common.storage import upload_file
+from src.common.cms_client import fetch_all_cms_data
+from src.common.config import CMS_HOSPITAL_API_URL
 
 RAW_OUTPUT_PATH = "data/raw/hospital_general_information.json"
 GCS_RAW_PATH = "raw/hospital_general_information.json"

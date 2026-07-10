@@ -1,6 +1,6 @@
 from google.cloud import storage
 
-from src.utils.config import GCS_BUCKET_NAME
+from src.common.config import GCS_BUCKET_NAME
 
 
 def upload_file(local_file_path, destination_blob_name):

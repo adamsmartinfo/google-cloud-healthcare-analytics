@@ -1,6 +1,6 @@
 from google.cloud import bigquery
 
-from src.utils.config import GCP_PROJECT_ID, BIGQUERY_DATASET
+from src.common.config import GCP_PROJECT_ID, BIGQUERY_DATASET
 
 
 def load_dataframe_to_bigquery(df, table_name):
