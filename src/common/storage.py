@@ -10,6 +10,6 @@ def upload_file(local_file_path, destination_blob_name):
 
     blob = bucket.blob(destination_blob_name)
 
-    blob.upload_from_filename(local_file_path)
+    blob.upload_from_filename(local_file_path,timeout=600,)
 
     print(f"Uploaded {local_file_path} to {destination_blob_name}")
