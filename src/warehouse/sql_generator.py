@@ -1,8 +1,8 @@
+from src.warehouse.config import (
+    BRONZE_DATASET,
+    SILVER_DATASET,
+)
 from src.warehouse.schemas import SCHEMA_REGISTRY
-
-
-LANDING_DATASET = "healthcare_data"
-SILVER_DATASET = "healthcare_silver"
 
 
 def build_select_expression(column_name, field_definition):
@@ -36,8 +36,13 @@ def generate_silver_table_sql(project_id, table_name):
     formatted_columns = ",\n    ".join(select_expressions)
 
     return f"""
-CREATE OR REPLACE TABLE `{project_id}.{SILVER_DATASET}.{table_name}` AS
+CREATE OR REPLACE TABLE
+`{project_id}.{SILVER_DATASET}.{table_name}`
+AS
+
 SELECT
     {formatted_columns}
-FROM `{project_id}.{LANDING_DATASET}.{table_name}`;
+
+FROM
+`{project_id}.{BRONZE_DATASET}.{table_name}`;
 """.strip()
