@@ -34,3 +34,6 @@ data/processed/
 # Coverage
 .coverage
 htmlcov/
+
+# Deployment
+deployment/env.cloud.yaml
