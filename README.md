@@ -183,10 +183,6 @@ Key performance indicators include:
 - Average Hospital-Acquired Condition Score
 - Medicare Payment Reduction Counts
 
-> **Screenshot Placeholder**
->
-> Insert the primary Looker Studio dashboard screenshot here.
-
 The dashboard demonstrates how curated healthcare data can be transformed into executive-ready business intelligence that supports operational decision making.
 
 ---
@@ -213,10 +209,6 @@ For every request, the application:
 5. Returns the results.
 6. Explains the findings in plain language.
 7. Automatically creates an appropriate visualization.
-
-> **Screenshot Placeholder**
->
-> Insert the main AI application screenshot here.
 
 ---
 
