@@ -1,3 +1,5 @@
+from typing import Any
+
 from langchain_core.tools import tool
 
 from src.tools.bigquery.metadata import (
@@ -33,7 +35,33 @@ def inspect_bigquery_table_schema(
 
 
 @tool
-def run_bigquery_read_only_query(sql: str) -> list[dict]:
-    """Run a read-only SELECT query in BigQuery with cost safeguards."""
+def run_bigquery_read_only_query(sql: str) -> dict[str, Any]:
+    """
+    Run a read-only SELECT query in BigQuery with cost safeguards.
 
-    return execute_read_only_query(sql)
+    Returns either:
+    - A successful response containing the SQL and query results.
+    - An error response the agent can use to correct the SQL.
+    """
+
+    try:
+        results = execute_read_only_query(sql)
+
+        return {
+            "success": True,
+            "sql": sql,
+            "row_count": len(results),
+            "results": results,
+        }
+
+    except Exception as error:
+        return {
+            "success": False,
+            "error_type": type(error).__name__,
+            "error_message": str(error),
+            "sql": sql,
+            "instruction": (
+                "Review the BigQuery error, correct the SQL, "
+                "and run the query again."
+            ),
+        }

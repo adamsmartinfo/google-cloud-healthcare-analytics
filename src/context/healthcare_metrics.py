@@ -10,11 +10,12 @@ HEALTHCARE_METRICS: dict[str, dict[str, Any]] = {
         ),
         "preferred_table": "healthcare_gold.dim_hospital",
         "calculation": "COUNT(DISTINCT facility_id)",
+        "aggregation_rule": "COUNT DISTINCT",
         "default_grain": "overall",
         "higher_is_better": None,
         "guidance": (
             "Use COUNT(DISTINCT facility_id) when joins or repeated rows could "
-            "cause duplicate hospitals."
+            "cause duplicate hospitals. Do not sum hospital identifiers."
         ),
     },
     "average_hospital_overall_rating": {
@@ -26,11 +27,13 @@ HEALTHCARE_METRICS: dict[str, dict[str, Any]] = {
         "preferred_table": "healthcare_gold.dim_hospital",
         "source_column": "hospital_overall_rating",
         "calculation": "AVG(hospital_overall_rating)",
+        "aggregation_rule": "AVERAGE",
         "default_grain": "state or hospital group",
         "higher_is_better": True,
         "guidance": (
             "Exclude NULL hospital ratings. Include the number of rated "
-            "hospitals when comparing averages across groups."
+            "hospitals when comparing averages across groups. Do not sum "
+            "hospital ratings."
         ),
     },
     "high_rated_hospital_percentage": {
@@ -47,11 +50,13 @@ HEALTHCARE_METRICS: dict[str, dict[str, Any]] = {
             "COUNTIF(hospital_overall_rating IS NOT NULL)"
             ") * 100"
         ),
+        "aggregation_rule": "PERCENTAGE",
         "default_grain": "state or hospital group",
         "higher_is_better": True,
         "guidance": (
             "The denominator must include only hospitals with a reported "
-            "overall rating. Also return the rated-hospital count."
+            "overall rating. Also return the rated-hospital count. Do not "
+            "average hospital-level percentages."
         ),
     },
     "payment_reduction_rate": {
@@ -70,11 +75,13 @@ HEALTHCARE_METRICS: dict[str, dict[str, Any]] = {
             "COUNTIF(payment_reduction IS NOT NULL)"
             ") * 100"
         ),
+        "aggregation_rule": "PERCENTAGE",
         "default_grain": "state or hospital group",
         "higher_is_better": False,
         "guidance": (
             "Clearly distinguish hospitals with payment reductions from "
-            "hospitals with missing payment-reduction information."
+            "hospitals with missing payment-reduction information. Do not "
+            "average Boolean values directly."
         ),
     },
     "average_value_based_purchasing_score": {
@@ -88,15 +95,25 @@ HEALTHCARE_METRICS: dict[str, dict[str, Any]] = {
         ),
         "source_column": "total_performance_score",
         "calculation": "AVG(total_performance_score)",
+        "aggregation_rule": "AVERAGE",
         "default_grain": "state or hospital group",
         "higher_is_better": True,
         "guidance": (
             "Exclude NULL scores and include the number of hospitals with a "
-            "reported score. Confirm the exact source column against the "
-            "warehouse schema before using this metric."
+            "reported score. Do not sum performance scores."
         ),
     },
 }
+
+
+GENERAL_ANALYTICS_RULES = [
+    "Use only approved metric calculations when a requested metric matches the catalog.",
+    "Do not aggregate text fields such as facility_name, city, state, or hospital_type.",
+    "Do not sum ratings, percentages, or performance scores.",
+    "Exclude NULL values when calculating averages unless the metric definition says otherwise.",
+    "Include the relevant hospital count when comparing averages or percentages across groups.",
+    "Use COUNT(DISTINCT facility_id) when duplicate hospital rows may be present.",
+]
 
 
 def format_healthcare_metric_catalog() -> str:
@@ -105,9 +122,19 @@ def format_healthcare_metric_catalog() -> str:
 
     Returns:
         A human-readable catalog containing approved metric definitions,
-        calculations, preferred tables, and interpretation guidance.
+        calculations, preferred tables, aggregation rules, and guidance.
     """
     sections: list[str] = []
+
+    rules_text = "\n".join(
+        f"- {rule}"
+        for rule in GENERAL_ANALYTICS_RULES
+    )
+
+    sections.append(
+        "GENERAL ANALYTICS RULES\n"
+        f"{rules_text}"
+    )
 
     for metric_id, metric in HEALTHCARE_METRICS.items():
         section_lines = [
@@ -116,21 +143,27 @@ def format_healthcare_metric_catalog() -> str:
             f"Description: {metric['description']}",
             f"Preferred table: {metric['preferred_table']}",
             f"Calculation: {metric['calculation']}",
+            f"Aggregation rule: {metric['aggregation_rule']}",
             f"Default grain: {metric['default_grain']}",
         ]
 
         higher_is_better = metric.get("higher_is_better")
 
         if higher_is_better is True:
-            section_lines.append("Interpretation: Higher values are generally better.")
+            section_lines.append(
+                "Interpretation: Higher values are generally better."
+            )
         elif higher_is_better is False:
-            section_lines.append("Interpretation: Lower values are generally better.")
+            section_lines.append(
+                "Interpretation: Lower values are generally better."
+            )
         else:
             section_lines.append(
                 "Interpretation: This is a descriptive count, not a quality measure."
             )
 
         source_column = metric.get("source_column")
+
         if source_column:
             section_lines.append(f"Source column: {source_column}")
 
