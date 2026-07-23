@@ -1,26 +1,36 @@
 # Google Cloud Healthcare Analytics Platform
 
-An end-to-end Analytics Engineering platform that automates the ingestion, standardization, warehousing, and visualization of publicly available CMS (Centers for Medicare & Medicaid Services) hospital performance data using Google Cloud Platform.
+An end-to-end healthcare analytics platform that automates the ingestion, transformation, warehousing, and analysis of publicly available CMS (Centers for Medicare & Medicaid Services) hospital performance data using Google Cloud Platform.
 
-Built using Python, Google Cloud Storage, BigQuery, Cloud Functions Gen2, Cloud Scheduler, and Looker Studio, this project demonstrates modern cloud data engineering practices through a fully automated Medallion (Bronze → Silver → Gold) architecture that transforms fragmented healthcare datasets into executive-ready business intelligence.
+The project demonstrates the complete analytics lifecycle—from cloud data engineering and dimensional modeling to executive business intelligence and AI-powered natural language analytics.
+
+## Live Applications
+
+- 🌐 **AI Analytics Web App:** https://ai-hospital-researcher-263128805643.us-west2.run.app
+- 📊 **Executive Dashboard:** https://datastudio.google.com/reporting/71783706-f467-41ae-b63c-bcdf7c65e9c5
 
 ---
 
 # Executive Summary
 
-Healthcare organizations, researchers, and analysts rely on CMS quality reporting data to evaluate hospital performance, patient outcomes, safety measures, and reimbursement programs. While these datasets are publicly available, they are distributed across numerous independent APIs with inconsistent schemas, varying data types, and separate business definitions, making comprehensive analysis both time-consuming and technically challenging.
+Healthcare organizations rely on CMS quality reporting data to evaluate hospital performance, patient outcomes, patient experience, and reimbursement programs. Although these datasets are publicly available, they are distributed across multiple APIs with inconsistent schemas, varying data types, and different business definitions, making meaningful analysis difficult.
 
-This project solves that problem by building a production-style cloud analytics platform that automatically extracts, validates, standardizes, warehouses, and models CMS hospital quality data into a centralized analytics environment optimized for executive reporting and business intelligence.
+This project addresses those challenges by building a modern cloud analytics platform that automatically extracts, validates, standardizes, and warehouses CMS data into a centralized BigQuery environment using a Medallion (Bronze → Silver → Gold) architecture.
 
-The platform currently integrates nine independent CMS datasets, stores raw source data in Google Cloud Storage, builds a dimensional data warehouse in BigQuery using a Medallion architecture, and delivers executive dashboards through Looker Studio. The entire platform executes automatically each month using Cloud Scheduler and Cloud Functions Gen2 without requiring any local infrastructure.
+The curated warehouse powers two complementary analytics experiences:
+
+- **Executive Business Intelligence** through interactive Looker Studio dashboards.
+- **AI-Powered Analytics** through a Streamlit application that enables users to explore the warehouse using natural language.
+
+The result is a scalable analytics platform that demonstrates modern Analytics Engineering, Data Engineering, Business Intelligence, Cloud Engineering, and AI application development.
 
 ---
 
 # Business Problem
 
-The Centers for Medicare & Medicaid Services publishes thousands of hospital quality metrics covering:
+CMS publishes thousands of hospital quality metrics covering areas such as:
 
-- Hospital Quality Ratings
+- Hospital Overall Ratings
 - Patient Experience (HCAHPS)
 - Hospital Readmissions
 - Mortality Measures
@@ -30,54 +40,63 @@ The Centers for Medicare & Medicaid Services publishes thousands of hospital qua
 - Value-Based Purchasing
 - Hospital-Acquired Condition Reduction Program
 
-Although individually valuable, these datasets present several engineering challenges:
+While these datasets are valuable individually, they present several engineering challenges:
 
 - Data is distributed across multiple REST APIs.
-- Each dataset contains different schemas and field names.
-- Data types are inconsistent across sources.
-- Business definitions vary between datasets.
-- No unified reporting model exists for enterprise analytics.
-- Significant engineering effort is required before meaningful business analysis can begin.
+- Schemas differ across datasets.
+- Data types are inconsistent.
+- Business definitions vary between sources.
+- No centralized reporting model exists.
+- Significant engineering work is required before meaningful analysis can begin.
 
-Organizations wishing to analyze hospital performance across these datasets must first build robust data engineering pipelines capable of ingesting, validating, standardizing, modeling, and maintaining the information over time.
+Organizations wishing to analyze hospital performance across these datasets must first build reliable pipelines capable of ingesting, validating, standardizing, modeling, and maintaining the data over time.
 
 ---
 
 # Solution
 
-This platform addresses those challenges by providing an automated cloud-native analytics solution that:
+This platform provides an automated cloud-native analytics solution that:
 
-- Extracts data from nine independent CMS REST APIs.
-- Archives raw JSON data within Google Cloud Storage.
-- Validates and standardizes inconsistent source data.
-- Automatically generates warehouse SQL from centralized metadata.
-- Loads standardized datasets into a Medallion (Bronze → Silver → Gold) data warehouse.
-- Builds dimensional business models optimized for analytics.
-- Powers executive dashboards through Looker Studio.
-- Refreshes the complete platform automatically each month using Cloud Scheduler and Cloud Functions.
+- Extracts data from nine CMS REST APIs.
+- Archives raw source data in Google Cloud Storage.
+- Standardizes data using a metadata-driven transformation framework.
+- Loads data into a BigQuery Medallion warehouse.
+- Builds business-ready dimensional models.
+- Delivers executive dashboards through Looker Studio.
+- Extends the warehouse with an AI-powered analytics application built with Streamlit and LangGraph.
+- Deploys the AI application publicly using Docker and Google Cloud Run.
 
-The result is a centralized analytics platform capable of supporting executive reporting, operational analysis, healthcare benchmarking, and future analytical expansion.
+The platform demonstrates how a well-designed cloud data warehouse can support both traditional business intelligence and modern AI-assisted analytics.
 
 ---
 
 # Project Highlights
 
-Current platform capabilities include:
+### Data Engineering
 
-- 9 independent CMS data ingestion pipelines
-- Fully modular Python ETL framework
-- Google Cloud Storage raw data archive
+- 9 automated CMS data ingestion pipelines
 - Metadata-driven schema registry
 - Automated SQL generation
-- Bronze → Silver → Gold warehouse architecture
+- Bronze → Silver → Gold Medallion architecture
 - BigQuery dimensional data warehouse
-- Executive reporting data models
-- Interactive Looker Studio dashboards
-- Automated monthly cloud execution
-- Cloud Functions Gen2 orchestration
-- Cloud Scheduler automation
-- Secure serverless deployment
-- Reusable shared pipeline framework
+- Fully automated monthly cloud execution
+
+### Business Intelligence
+
+- Executive KPI dashboard
+- Interactive geographic visualizations
+- State performance comparisons
+- Hospital performance drill-downs
+- Cross-filtering and interactive reporting
+
+### AI Analytics
+
+- Natural language analytics interface
+- LangGraph agent workflow
+- Automatic SQL generation
+- BigQuery query execution
+- AI-generated result explanations
+- Automatic data visualizations
 
 ---
 
@@ -92,12 +111,20 @@ Current platform capabilities include:
 | Data Processing | Pandas |
 | APIs | CMS REST APIs |
 | Business Intelligence | Looker Studio |
+| AI Framework | LangGraph |
+| LLM | GitHub Models (GPT-4.1 Mini) |
+| Web Application | Streamlit |
+| Deployment | Docker, Google Cloud Run |
 | Automation | Cloud Functions Gen2, Cloud Scheduler |
 | Version Control | Git & GitHub |
 
 ---
 
-# High-Level Architecture
+# Platform Architecture
+
+The platform follows a modern cloud analytics architecture that transforms fragmented healthcare datasets into business-ready analytical assets. Public CMS data is ingested through automated Python ETL pipelines, standardized using a metadata-driven transformation framework, and stored in a Medallion (Bronze → Silver → Gold) data warehouse within BigQuery.
+
+The curated Gold layer serves as the single source of truth for both executive dashboards and AI-powered natural language analytics.
 
 ```text
                     CMS Healthcare REST APIs
@@ -125,300 +152,25 @@ Current platform capabilities include:
                                ▼
                      healthcare_gold
              Business-Ready Dimensional Models
-                               │
-                               ▼
-                     Looker Studio
-                Executive Performance Dashboard
-```
+                     ┌─────────┴─────────┐
+                     ▼                   ▼
+          Looker Studio           AI Analytics
+      Executive Dashboard         Web Application
 
 ---
 
-# Automated Cloud Architecture
+# Executive Business Intelligence
 
-The platform operates as a fully automated serverless solution hosted within Google Cloud Platform.
+The first analytics experience built on top of the curated Gold warehouse is an executive dashboard developed in Looker Studio.
 
-```text
-                  Cloud Scheduler
-                (Monthly Schedule)
-                         │
-                         ▼
-            Cloud Functions Gen2 (HTTP)
-                         │
-                         ▼
-              run_all_pipelines.py
-             Pipeline Orchestration Layer
-                         │
-        ┌────────────────┼────────────────┐
-        │                │                │
-        ▼                ▼                ▼
- Hospital Info      Readmissions      HCAHPS
-        │                │                │
-        └────────────────┼────────────────┘
-                         │
-                  Remaining CMS APIs
-                         │
-                         ▼
-                Google Cloud Storage
-                         │
-                         ▼
-               Bronze → Silver → Gold
-                         │
-                         ▼
-               Looker Studio Dashboard
-```
-
-# Medallion Data Warehouse
-
-The platform implements a Medallion Architecture to progressively improve data quality as it moves through the analytics pipeline.
-
-```text
-                    Bronze
-                 Raw CMS Data
-                      │
-                      ▼
-                    Silver
-         Cleaned, Typed & Standardized
-                      │
-                      ▼
-                     Gold
-      Business-Ready Dimensional Models
-                      │
-                      ▼
-          Executive Reporting & Analytics
-```
-
-Each layer serves a distinct purpose, allowing raw source data to remain unchanged while providing increasingly refined datasets optimized for business intelligence and analytical reporting.
-
----
-
-# Bronze Layer
-
-The Bronze layer stores the original CMS datasets exactly as received from each API.
-
-Objectives:
-
-- Preserve source system fidelity
-- Maintain historical snapshots
-- Support data lineage
-- Enable auditing and troubleshooting
-- Provide a reliable foundation for downstream transformations
-
-Current Bronze datasets include:
-
-- Hospital General Information
-- Hospital Readmissions
-- HCAHPS Patient Experience
-- Hospital Mortality
-- Timely & Effective Care
-- Healthcare-Associated Infections
-- Outpatient Imaging Efficiency
-- Hospital Value-Based Purchasing
-- Hospital-Acquired Condition Reduction Program
-
-Characteristics:
-
-- Raw JSON ingestion
-- Minimal transformation
-- One table per CMS dataset
-- Cloud Storage archive maintained for every refresh
-
----
-
-# Silver Layer
-
-The Silver layer transforms raw CMS datasets into standardized analytical tables.
-
-Rather than manually writing transformation SQL for every dataset, the platform generates warehouse SQL automatically from a centralized schema registry.
-
-Key transformations include:
-
-- SAFE_CAST data conversions
-- Boolean normalization
-- Date parsing
-- Numeric validation
-- Field standardization
-- Null handling
-- Business rule application
-- Consistent naming conventions
-
-Benefits:
-
-- Consistent warehouse design
-- Reduced manual development
-- Easer onboarding of new datasets
-- Metadata-driven transformations
-- Improved maintainability
-
----
-
-# Gold Layer
-
-The Gold layer contains business-ready dimensional models optimized for reporting and analytics.
-
-Rather than exposing raw CMS datasets directly to dashboard users, the Gold layer combines information across multiple source systems into intuitive business entities.
-
-Current Gold models include:
-
-## Dimension Tables
-
-- dim_hospital
-
-Provides standardized descriptive information for every hospital including:
-
-- Facility identifiers
-- Geographic information
-- Hospital characteristics
-- Ownership
-- Hospital type
-- Location attributes
-
----
-
-## Fact Tables
-
-### fact_hospital_performance_summary
-
-Combines metrics across multiple CMS datasets into a single executive reporting model.
-
-Current measures include:
-
-- CMS Overall Hospital Rating
-- Value-Based Purchasing Score
-- Hospital-Acquired Condition Score
-- Medicare Payment Reduction Indicator
-- Hospital Performance Metrics
-- Geographic attributes
-- Organizational characteristics
-
-This dimensional model powers the executive dashboard built in Looker Studio.
-
----
-
-# Project Structure
-
-```text
-google-cloud-healthcare-analytics/
-
-├── data/
-│
-├── dashboards/
-│
-├── deployment/
-│   ├── deploy.sh
-│   └── env.cloud.yaml
-│
-├── docs/
-│
-├── src/
-│   ├── common/
-│   │   ├── config.py
-│   │   ├── bigquery.py
-│   │   ├── storage.py
-│   │   ├── cms_api.py
-│   │   └── utilities.py
-│   │
-│   ├── pipelines/
-│   │   ├── hospital_general_information/
-│   │   ├── hospital_readmissions/
-│   │   ├── hospital_hcahps/
-│   │   ├── hospital_mortality/
-│   │   ├── hospital_timely_effective_care/
-│   │   ├── hospital_hai/
-│   │   ├── hospital_outpatient_imaging/
-│   │   ├── hospital_value_based_purchasing/
-│   │   └── hospital_hac_reduction/
-│   │
-│   └── warehouse/
-│       ├── schemas.py
-│       ├── sql_generator.py
-│       ├── build_silver.py
-│       └── build_gold.py
-│
-├── run_all_pipelines.py
-├── main.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-# Data Pipeline Framework
-
-Each CMS dataset is implemented as an independent ETL pipeline.
-
-```text
-Extract
-    │
-    ▼
-Transform
-    │
-    ▼
-Load
-    │
-    ▼
-Pipeline Coordinator
-```
-
-Every pipeline follows the same reusable architecture and shares common utility modules for:
-
-- CMS API communication
-- Cloud Storage operations
-- BigQuery integration
-- Configuration management
-- Logging
-- Error handling
-
-This modular approach allows new CMS datasets to be added with minimal additional development while maintaining a consistent project structure.
-
----
-
-# Metadata-Driven Schema Registry
-
-One of the core architectural decisions within this project is the use of a centralized schema registry.
-
-Rather than hard-coding warehouse schemas throughout the project, every dataset is defined once within a metadata repository.
-
-Each field contains metadata including:
-
-- Business name
-- Business definition
-- BigQuery data type
-- Nullable status
-- Transformation rules
-
-The schema registry serves as the single source of truth for the warehouse.
-
----
-
-# Automated SQL Generation
-
-Instead of manually maintaining hundreds of lines of warehouse SQL, the platform automatically generates BigQuery SQL from the schema registry.
-
-This approach provides several advantages:
-
-- Consistent data typing
-- Standardized transformations
-- Reduced maintenance effort
-- Easier expansion to new datasets
-- Improved documentation
-- Lower risk of implementation errors
-
-By separating metadata from implementation logic, the platform becomes significantly easier to maintain and extend as additional CMS datasets are incorporated.
-
----
-
-# Executive Dashboard
-
-The platform includes an interactive executive dashboard built in Looker Studio that enables users to analyze hospital performance across the United States.
-
-The dashboard is powered entirely by the Gold dimensional warehouse and provides executive-level insights into hospital quality, safety, and value-based purchasing performance.
+Rather than requiring users to query raw healthcare datasets, the dashboard presents key performance indicators and visualizations that allow executives to quickly assess hospital quality, patient outcomes, and reimbursement metrics.
 
 Current dashboard capabilities include:
 
 - Executive KPI scorecards
 - Interactive geographic hospital map
 - State-level performance comparisons
-- Hospital rating distribution analysis
+- Hospital rating distribution
 - Top and Bottom 10 state rankings
 - Detailed hospital performance table
 - Interactive filtering across all visualizations
@@ -431,140 +183,157 @@ Key performance indicators include:
 - Average Hospital-Acquired Condition Score
 - Medicare Payment Reduction Counts
 
-The dashboard demonstrates how standardized healthcare data can be transformed into actionable business intelligence for executive decision-making.
+> **Screenshot Placeholder**
+>
+> Insert the primary Looker Studio dashboard screenshot here.
 
-
----
-
-# Production Features
-
-The platform was designed using modern Analytics Engineering and cloud-native design principles.
-
-Current production features include:
-
-- Fully automated monthly cloud execution
-- Serverless architecture using Cloud Functions Gen2
-- Cloud Scheduler orchestration
-- Metadata-driven warehouse generation
-- Automated SQL generation
-- Modular ETL framework
-- Centralized configuration management
-- Reusable pipeline architecture
-- BigQuery dimensional warehouse
-- Executive reporting layer
-- Secure cloud deployment
-- Scalable architecture for additional CMS datasets
+The dashboard demonstrates how curated healthcare data can be transformed into executive-ready business intelligence that supports operational decision making.
 
 ---
 
-# Technical Skills Demonstrated
+# AI Analytics Web Application
 
-This project demonstrates practical experience across multiple areas of modern Analytics Engineering and Cloud Data Engineering.
+To extend the capabilities of the platform beyond traditional dashboards, I developed an AI-powered analytics application using Streamlit and LangGraph.
 
-### Analytics Engineering
+Instead of navigating dashboards or writing SQL, users can ask questions about hospital performance using natural language. The application translates user requests into SQL, retrieves data from the BigQuery warehouse, explains the results, and generates visualizations automatically.
 
-- Medallion Architecture
-- Dimensional Modeling
-- Metadata-Driven Development
-- Data Warehouse Design
-- Data Standardization
-- Business Intelligence
+Example questions include:
 
-### Data Engineering
+- Which states have the highest average hospital ratings?
+- Show the average Value-Based Purchasing score by state.
+- Which hospitals received Medicare payment reductions?
+- Compare hospital ratings across Utah.
 
-- ETL Pipeline Development
-- REST API Integration
-- Cloud Data Pipelines
-- Data Validation
-- Data Transformation
-- Schema Management
+For every request, the application:
 
-### Google Cloud Platform
+1. Interprets the user's question.
+2. Generates SQL using an LLM.
+3. Validates the generated query.
+4. Executes the query against BigQuery.
+5. Returns the results.
+6. Explains the findings in plain language.
+7. Automatically creates an appropriate visualization.
 
-- Google Cloud Storage
-- BigQuery
-- Cloud Functions Gen2
-- Cloud Scheduler
-- Serverless Computing
-
-### Software Engineering
-
-- Python
-- Modular Application Architecture
-- Configuration Management
-- Reusable Components
-- Logging
-- Error Handling
-- Git
-- GitHub
+> **Screenshot Placeholder**
+>
+> Insert the main AI application screenshot here.
 
 ---
 
-# Current Project Status
+# AI Application Features
 
-## Completed
+Current capabilities include:
 
-✅ Google Cloud infrastructure
-
-✅ CMS API ingestion framework
-
-✅ Nine independent ETL pipelines
-
-✅ Google Cloud Storage raw archive
-
-✅ Bronze warehouse layer
-
-✅ Silver warehouse layer
-
-✅ Gold dimensional warehouse
-
-✅ Metadata-driven schema registry
-
-✅ Automated SQL generation
-
-✅ Executive reporting data model
-
-✅ Looker Studio dashboard
-
-✅ Cloud Functions deployment
-
-✅ Cloud Scheduler monthly automation
+- Natural language analytics
+- LangGraph workflow orchestration
+- Automatic SQL generation
+- SQL transparency
+- BigQuery integration
+- AI-generated explanations
+- Interactive data tables
+- Automatic chart generation
+- Public web deployment using Google Cloud Run
 
 ---
 
-# Future Enhancements
+# AI Architecture
 
-Potential future improvements include:
+The AI application uses a LangGraph workflow to transform natural language questions into actionable business insights.
 
+```text
+                User Question
+                      │
+                      ▼
+            Streamlit Web Interface
+                      │
+                      ▼
+               LangGraph Workflow
+                      │
+      ┌───────────────┼────────────────┐
+      │               │                │
+      ▼               ▼                ▼
+Interpret Query   Generate SQL   Validate SQL
+      │               │                │
+      └───────────────┼────────────────┘
+                      ▼
+                Google BigQuery
+                      │
+                      ▼
+                Query Results
+                      │
+        ┌─────────────┴─────────────┐
+        ▼                           ▼
+ AI Explanation            Visualization Engine
+        │                           │
+        └─────────────┬─────────────┘
+                      ▼
+             Streamlit Application
 
-- Data quality monitoring framework
-- Automated unit and integration testing
+---
+
+# Repository Structure
+
+```text
+google-cloud-healthcare-analytics/
+
+├── app/                     # Streamlit AI Analytics application
+│   ├── app.py
+│   ├── pages/
+│   └── components/
+│
+├── src/
+│   ├── common/
+│   ├── pipelines/
+│   ├── warehouse/
+│   └── ai/
+│
+├── deployment/
+│
+├── dashboards/
+│
+├── docs/
+│
+├── Dockerfile
+├── deploy_streamlit.sh
+├── requirements.txt
+└── README.md
+
+---
+
+# Next Steps
+
+Potential enhancements that could be added in future iterations include:
+
+- Expanding the data warehouse with additional CMS datasets
+- User authentication and role-based access
+- Conversation history for AI analytics sessions
+- Exporting AI-generated analyses to PDF or Excel
+- Retrieval-Augmented Generation (RAG) using CMS documentation
+- Predictive analytics and machine learning models
 - Infrastructure as Code (Terraform)
-- Additional Gold dimensional models
-- Predictive analytics and machine learning
-- Expanded healthcare quality metrics
+- Automated unit and integration testing
 
 ---
 
-# Why This Project
+# Conclusion
 
-This project was created to demonstrate how modern cloud technologies and Analytics Engineering practices can transform fragmented public healthcare data into a scalable, automated business intelligence platform.
+This project demonstrates the complete analytics lifecycle, beginning with raw public healthcare data and ending with multiple analytics experiences built on a trusted cloud data warehouse.
 
-Rather than focusing solely on data visualization, the project emphasizes the complete analytics lifecycle—from data acquisition and cloud storage through warehouse engineering, dimensional modeling, automation, and executive reporting.
+The platform combines modern Analytics Engineering, Data Engineering, Business Intelligence, Cloud Engineering, and AI application development into a single end-to-end solution.
 
-The overall architecture reflects many of the same design principles used within enterprise analytics organizations, including modular software design, reusable ETL pipelines, metadata-driven development, serverless cloud computing, and dimensional data warehousing.
+By separating data ingestion, warehouse engineering, reporting, and AI into modular components, the platform is designed to be scalable, maintainable, and extensible while demonstrating technologies commonly used in enterprise analytics organizations.
 
 ---
 
 # Acknowledgements
 
-Healthcare data provided by the **Centers for Medicare & Medicaid Services (CMS)** through the CMS Provider Data APIs.
+Healthcare data is provided by the **Centers for Medicare & Medicaid Services (CMS)** through the CMS Provider Data APIs.
 
-This project was developed for educational and portfolio purposes to demonstrate practical cloud data engineering, analytics engineering, and business intelligence skills using publicly available datasets.
+This project was developed for educational and portfolio purposes using publicly available datasets.
 
 ---
 
 # License
 
-This repository is released under the MIT License.
+This project is licensed under the MIT License.
 
